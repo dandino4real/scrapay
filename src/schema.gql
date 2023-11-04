@@ -10,6 +10,7 @@ type Book {
 
 type Query {
   books: [Book!]!
+  getBook(id: Int!): Book!
 }
 
 type Mutation {
