@@ -1,33 +1,29 @@
 import { Module } from '@nestjs/common';
 import { BooksModule } from './books/books.module';
-import { UsersModule } from './users/users.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PetsModule } from './pets/pets.module';
-import { UsersModule } from './users/users.module';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import auth0Config from './config/auth.config';
 
 @Module({
-  imports: [GraphQLModule.forRoot<ApolloDriverConfig>({
-    driver: ApolloDriver,
-    autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-  }), BooksModule, UsersModule,
-  
-  TypeOrmModule.forRoot({
-    type: 'sqlite',
-    // host: 'localhost',
-    // port: 3306,
-    // username: 'root',
-    // password: 'root',
-    database: ':memory:',
-    entities: ['dist/**/*.entity{.ts,.js}'],
-    synchronize: true,
-  }),
-  
-  PetsModule,
-  
-],
+  imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: './db/book-database.db',
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      synchronize: true,
+    }),
+    BooksModule,
+    AuthModule,
+    ConfigModule.forRoot({ isGlobal: true, load: [auth0Config] }),
+  ],
   controllers: [],
   providers: [],
 })
