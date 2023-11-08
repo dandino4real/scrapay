@@ -80,9 +80,6 @@
       "json",
       "ts"
     ],
-    "engines": {
-      "node": "16.13.0"
-    },
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
